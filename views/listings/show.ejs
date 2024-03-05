@@ -15,9 +15,7 @@
                 <li> &#8377;<%= list.price.toLocaleString("en-IN") %></li>
                 <li><%= list.location%></li>
                 <li><%= list.country%></li>
-                <form method="get" action="/listing/edit/:<%=list.id%>">
-                    <button class="add">edit listing</button>
-                </form>
+              
                 <% } %>
          </ul>
     </ul>

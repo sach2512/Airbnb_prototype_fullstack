@@ -24,12 +24,7 @@ app.get('/',(req,res)=>{
 
 
 
-// app.get('/listings', async (req,res)=>{
-//  let listing= await Listing.find({}).then((data)=>{
-//     res.render("index.ejs",{Listing});
-//  })
 
-// })
 app.get('/listings',async(req,res)=>{
     let listing=await Listing.find({})
    res.render("index.ejs",{listing});
@@ -50,20 +45,27 @@ app.get('/listing/new',async (req,res)=>{
     await res.render("newlisting.ejs");
 })
 
-app.post('/newlisting',async (req,res)=>{
-    let {title,description,image,price,location,country}=req.body;
-    let query={};
-    if(title && description&& image&&price&&location&&country){
-        query={title:title,description:description,image:image,price:price,location:location,country:country}
-        
-    }
-  let data= await Listing.insertOne(query,(err,data)=>{
-        if(err) throw err;
-        console.log(data)
-    });
+app.post('/newlisting', async (req, res) => {
+    try {
+        let { title, description, image, price, location, country } = req.body;
 
-    
-})
+        const newlist = new Listing({
+            title: title,
+            description: description,
+            image: image,
+            price: price,
+            location: location,
+            country: country
+        });
+
+        await newlist.save();
+        res.render("index.ejs");
+    } catch (err) {
+        console.error('Error saving new listing:', err);
+        res.status(500).send('Internal Server Error');
+    }
+});
+
 
 //update and edit data
 
