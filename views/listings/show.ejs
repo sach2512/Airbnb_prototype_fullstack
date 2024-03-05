@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <ul>
+        <ul>
+            <% for (let list of eachlisting) { %>
+                <li><%= list.title %></li>
+                <li><%= list.description %></li>
+                
+                <li> &#8377;<%= list.price.toLocaleString("en-IN") %></li>
+                <li><%= list.location%></li>
+                <li><%= list.country%></li>
+                <form method="get" action="/listing/edit/:<%=list.id%>">
+                    <button class="add">edit listing</button>
+                </form>
+                <% } %>
+         </ul>
+    </ul>
+</body>
+</html>

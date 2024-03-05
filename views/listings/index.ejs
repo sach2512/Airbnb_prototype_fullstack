@@ -5,16 +5,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>document</title>
 </head>
-<body>
+
     <body>
-        <% for (let list for listing) { %>
-            <h3><%= list.title %></h3>
-        <% } %>
-        
+        <form method="get" action="/listing/new">
+            <button class="add">add listing</button>
+        </form>
+        <br>
+        <br>
+       
+     
+        <ul>
+            <% for (let list of listing) { %>
+                <li><a href="/listings/show/<%=list.id%>"><%= list.title %></a></li>
+               
+                <% } %>
+         </ul>
         
         
     </body>
     
-    
-</body>
 </html>
