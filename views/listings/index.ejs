@@ -3,25 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>document</title>
+    <title>Document</title>
 </head>
-
-    <body>
-        <form method="get" action="/listing/new">
-            <button class="add">add listing</button>
-        </form>
-        <br>
-        <br>
-       
-     
-        <ul>
-            <% for (let list of listing) { %>
-                <li><a href="/listings/show/<%=list.id%>"><%= list.title %></a></li>
-                
-                <% } %>
-         </ul>
+<body>
+    <form action="/listing/new" method="get">
+        <button >add new listing</button>
+    </form>
+    <h4>all listing</h4>
+    <ul>
+        <% for(var list of listing) { %>
+           <a href="/listings/<%=list.id%>/details"> <li><%= list.title %></li></a>
+        <% } %>
         
-        
-    </body>
-    
+    </ul>
+</body>
 </html>

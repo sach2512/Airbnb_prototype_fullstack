@@ -6,18 +6,13 @@
     <title>Document</title>
 </head>
 <body>
-    <ul>
-        <ul>
-            <% for (let list of eachlisting) { %>
-                <li><%= list.title %></li>
-                <li><%= list.description %></li>
-                
-                <li> &#8377;<%= list.price.toLocaleString("en-IN") %></li>
-                <li><%= list.location%></li>
-                <li><%= list.country%></li>
-              
-                <% } %>
-         </ul>
-    </ul>
+  <ul>
+    <li><%= listing.title %></li>
+    <li><%= listing.description %></li>
+    
+    <li> &#8377;<%= listing.price.toLocaleString("en-IN") %></li>
+    <li><%= listing.location%></li>
+    <li><%= listing.country%></li>
+  </ul>
 </body>
 </html>
