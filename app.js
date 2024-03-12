@@ -1,7 +1,6 @@
 const express= require("express");
 const mongoose= require("mongoose");
-const ejs= require("ejs");
-const url="mongodb://localhost:27017/listing"
+const url="mongodb://localhost:27017/sachin"
 const port=8080;
 const app=express();
 const methodOverride = require("method-override");
@@ -18,29 +17,24 @@ async function main(){
    
    }
    
-   main().then(()=>{
-       console.log("connected")
-}).catch(()=>{
-       console.log( " not connected")
+   main()
+   .then(()=>{
+      console.log("Connection Successfull");
    })
+   .catch(err => console.log(err));
+  
+   async function main() {
+    await mongoose.connect('mongodb://127.0.0.1:27017/listing');
+  }
 
-   const initDB= async ()=>{
-    await Listing.deleteMany({});
-    await Listing.insertMany(data.data);
-    //console.log("data");
-
-}
-
-initDB();
 
 app.get('/listing', async (req,res)=>{
-  
-    const listings = await Listing.find({}).maxTimeMS(20000);
+    const listings = await Listing.find({});
     //console.log(listings);
     res.render("index.ejs",{listings});
 })
 
-app.get('/listing/deatils/:id',async (req,res)=>{
+app.get('/listing/details/:id',async (req,res)=>{
     let id= req.params.id;
     //console.log(id);
     const listing = await Listing.findById(id);
@@ -48,16 +42,33 @@ app.get('/listing/deatils/:id',async (req,res)=>{
   
 })
 
-// app.get('/listing/new',(req,res)=>{
-//     res.render("newlisting.ejs");
-// })
 
-// app.post('/newlisting', async (req, res) => {
-//     let title = req.body.title;
-  
-//   console.log(title);
-    
-// });
+
+app.get('/listing/new',async (req,res)=>{
+    await res.render("newlisting.ejs");
+})
+
+app.post('/newlisting', async (req, res) => {
+    try {
+        let { title, description, image, price, location, country } = req.body;
+
+        const newlist = new Listing({
+            title: title,
+            description: description,
+            image: image,
+            price: price,
+            location: location,
+            country: country
+        });
+
+        await newlist.save();
+       res.render("index.ejs");
+    } catch (err) {
+        console.error('Error saving new listing:', err);
+        res.status(500).send('Internal Server Error');
+    }
+});
+
 
 
 app.get('/listing/:id/edit', async (req,res)=>{
