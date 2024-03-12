@@ -59,6 +59,32 @@ app.get('/listing/deatils/:id',async (req,res)=>{
     
 // });
 
+app.get('/listing/new',async (req,res)=>{
+    await res.render("newlisting.ejs");
+})
+
+app.post('/newlisting', async (req, res) => {
+    try {
+        let { title, description, image, price, location, country } = req.body;
+
+        const newlist = new Listing({
+            title: title,
+            description: description,
+            image: image,
+            price: price,
+            location: location,
+            country: country
+        });
+
+        await newlist.save();
+       res.render("index.ejs");
+    } catch (err) {
+        console.error('Error saving new listing:', err);
+        res.status(500).send('Internal Server Error');
+    }
+});
+
+
 
 app.get('/listing/:id/edit', async (req,res)=>{
     let id= req.params.id;
