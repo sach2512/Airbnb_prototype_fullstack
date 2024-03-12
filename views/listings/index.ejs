@@ -11,10 +11,10 @@
     </form>
     <h4>all listing</h4>
     <ul>
-        <% for(var list of listing) { %>
-           <a href="/listings/<%=list.id%>/details"> <li><%= list.title %></li></a>
-        <% } %>
-        
+        <%for(var list of listings){%>
+            <a href="listing/deatils/<%=list.id%>"><li><%=list.title%></li></a>
+        <%}%>
     </ul>
+    
 </body>
 </html>

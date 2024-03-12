@@ -14,5 +14,9 @@
     <li><%= listing.location%></li>
     <li><%= listing.country%></li>
   </ul>
+  <form action="/listing/<%=listing.id%>/edit" method="get">
+    <button >edit</button>
+</form>
+
 </body>
 </html>
