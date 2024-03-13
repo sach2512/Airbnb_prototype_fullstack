@@ -51,6 +51,7 @@ app.get('/listing/new', async (req, res) => {
     await res.render("newlisting.ejs");
 })
 
+<<<<<<< HEAD
 app.post('/newlisting', async (req, res) => {
     try {
         let { title, description, image, price, location, country } = req.body;
@@ -70,6 +71,13 @@ app.post('/newlisting', async (req, res) => {
         res.status(500).send('Internal Server Error');
     }
 });
+=======
+app.post("/listings", async (req, res) => {
+    const newListing = new Listing(req.body.listing);
+    await newListing.save();
+    res.redirect("/listing");
+  });
+>>>>>>> dce490b635a56f99338b636a18b1edef4c01f805
 
 
 
@@ -81,6 +89,7 @@ app.get('/listing/:id/edit', async (req, res) => {
     console.log(listing);
 })
 
+<<<<<<< HEAD
 app.put('/listing/:id/edited', async (req, res) => {
     try {
         let id = req.params.id;
@@ -109,6 +118,20 @@ app.delete('/listing/:id/delete',async(req,res)=>{
     let listing= await Listing.findByIdAndDelete(id);
     res.redirect('/listing')
 })
+=======
+app.put("/listings/:id", async (req, res) => {
+    let { id } = req.params;
+    await Listing.findByIdAndUpdate(id, { ...req.body.listing });
+    res.redirect(`/listing/details/${id}`);
+  });
+
+  app.delete("/listings/:id", async (req, res) => {
+    let { id } = req.params;
+    let deletedListing = await Listing.findByIdAndDelete(id);
+    console.log(deletedListing);
+    res.redirect("/listing");
+  });
+>>>>>>> dce490b635a56f99338b636a18b1edef4c01f805
 
 
 
