@@ -1,7 +1,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const url = "mongodb://localhost:27017/sachin"
-const port = 8080;
+const port = 8180;
 const app = express();
 const methodOverride = require("method-override");
 const data = require('./data/data');
@@ -102,6 +102,13 @@ app.put('/listing/:id/edited', async (req, res) => {
         res.status(500).send("Error updating listing");
     }
 });
+
+app.delete('/listing/:id/delete',async(req,res)=>{
+    let id= req.params.id
+    console.log(id);
+    let listing= await Listing.findByIdAndDelete(id);
+    res.redirect('/listing')
+})
 
 
 
