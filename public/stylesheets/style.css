@@ -1,0 +1,60 @@
+/*navbar styling */
+.navbar {
+    background-color: #f8f9fa; 
+    border-bottom: 2px solid #dee2e6; 
+  }
+
+  .navbar-brand {
+    font-weight: bold; 
+  }
+
+  .navbar-toggler {
+    border-color: transparent; 
+  }
+
+  .navbar-toggler-icon {
+    background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3e%3cpath stroke='rgba(0, 0, 0, 0.5)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+    
+  }
+
+  .navbar-nav .nav-link {
+    font-weight: bold; 
+  }
+
+/* footer styling */
+.footer {
+    background-color: beige;
+    padding: 20px;
+    text-align: center; 
+  }
+
+  .contactinfo {
+    margin-bottom: 10px;
+  }
+
+  .contact {
+    list-style: none;
+    padding: 0;
+    display: inline-block; 
+  }
+
+  .contact li {
+    display: inline-block;
+    margin-right: 10px;
+  }
+
+  .contact li a {
+    text-decoration: none;
+    color: #222;
+  }
+
+  .privacy a, .infolinks a {
+    text-decoration: none;
+    color: #222;
+    margin: 0 5px;
+  }
+
+  hr {
+    border: 0;
+    border-top: 1px solid #ccc;
+  }

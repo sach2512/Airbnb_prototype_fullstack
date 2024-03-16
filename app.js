@@ -1,17 +1,20 @@
 const express = require("express");
 const mongoose = require("mongoose");
-const url = "mongodb://localhost:27017/sachin"
+
 const port = 8180;
 const app = express();
 const methodOverride = require("method-override");
 const data = require('./data/data');
 const Listing = require("./models/listingmodel");
 app.set("view engine", "ejs");
+const path= require("path");
 app.set("views", "./views/listings");
 app.use(express.static('./public'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
+const engine = require("ejs-mate");
+app.engine('ejs', engine);
 async function main() {
     await mongoose.connect(url);
 
@@ -26,7 +29,9 @@ main()
 async function main() {
     await mongoose.connect('mongodb://127.0.0.1:27017/listing');
 }
-
+app.get('/',async(req,res)=>{
+    res.send("hi i am home");
+})
 
 app.get('/listing', async (req, res) => {
     const listings = await Listing.find();
@@ -46,11 +51,9 @@ app.get('/listing/details/:id', async (req, res) => {
 
 
 
-
-app.get('/listing/new', async (req, res) => {
+  app.get('/listing/new', async (req, res) => {
     await res.render("newlisting.ejs");
 })
-
 
 app.post('/newlisting', async (req, res) => {
     try {
@@ -72,12 +75,6 @@ app.post('/newlisting', async (req, res) => {
     }
 });
 
-app.post("/listings", async (req, res) => {
-    const newListing = new Listing(req.body.listing);
-    await newListing.save();
-    res.redirect("/listing");
-  });
-
 
 
 
@@ -88,7 +85,6 @@ app.get('/listing/:id/edit', async (req, res) => {
     res.render("edit.ejs", { listing });
     console.log(listing);
 })
-
 
 app.put('/listing/:id/edited', async (req, res) => {
     try {
@@ -111,19 +107,6 @@ app.put('/listing/:id/edited', async (req, res) => {
         res.status(500).send("Error updating listing");
     }
 });
-
-app.delete('/listing/:id/delete',async(req,res)=>{
-    let id= req.params.id
-    console.log(id);
-    let listing= await Listing.findByIdAndDelete(id);
-    res.redirect('/listing')
-})
-
-app.put("/listings/:id", async (req, res) => {
-    let { id } = req.params;
-    await Listing.findByIdAndUpdate(id, { ...req.body.listing });
-    res.redirect(`/listing/details/${id}`);
-  });
 
   app.delete("/listings/:id", async (req, res) => {
     let { id } = req.params;
