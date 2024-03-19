@@ -1,7 +1,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
 
-const port = 8180;
+const port = 8080;
 const app = express();
 const methodOverride = require("method-override");
 const data = require('./data/data');
