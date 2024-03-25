@@ -42,26 +42,44 @@
 
 
 <body>
-    <form action="/newlisting" method="post">
-        <label for="title">title:</label>
-        <input type="text" id="title" name="title" required>
-
+    <form action="/newlisting" method="post" class="needs-validation" novalidate>
+        <div >
+            <label for="title">title:</label>
+        <input type="text" id="title" name="title" required >
+            <div class="valid-feedback">looks good</div>
+            <div class="invalid-feedback">title is required</div>
+        </div>
+       <div>
         <label for="description">description:</label>
-        <input type="textarea" id="description" name="description" required>
+        <input type="textarea" id="description" name="description" required >
+        <div class="invalid-feedback">description is required</div>
+        
+       </div>
+        <div>
+            <label for="image">Image File:</label>
+        <input type="text" id="image" name="image"  >
+       
+        </div>
 
-        <label for="image">Image File:</label>
-        <input type="text" id="image" name="image" required>
-
+      <div>
         <label for="price">Price:</label>
-        <input type="number" id="price" name="price" required>
-
-        <label for="location">Location:</label>
-        <input type="text" id="location" name="location" required>
-
-        <label for="country">Country:</label>
-        <input type="text" id="country" name="country" required>
+        <input type="text" id="price" name="price" required >
+        <div class="invalid-feedback">price is required</div>
+      </div>
+<div>
+    
+    <label for="location">Location:</label>
+    <input type="text" id="location" name="location" required >
+    <div class="invalid-feedback">location is required</div>
+</div>
+<div>
+    
+    <label for="country">Country:</label>
+    <input type="text" id="country" name="country" required >
+    <div class="invalid-feedback">country is required</div>
+</div>
 
         <button type="submit">Add Listing</button>
     </form>
+    <script src="/script.js/validation.js"></script>
 </body>
-
