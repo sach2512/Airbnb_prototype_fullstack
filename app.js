@@ -1,6 +1,6 @@
 const express = require("express");
 const mongoose = require("mongoose");
-
+const reviews = require('./models/reviewmodel')
 const port = 8080;
 const app = express();
 const methodOverride = require("method-override");
@@ -111,6 +111,12 @@ app.put('/listing/:id/edited', wrapAsync(async (req, res) => {
     console.log(deletedListing);
     res.redirect("/listing");
   }));
+
+app.post('listing/:id/review', async (req,res)=>{
+   console.log("hello")
+   
+})
+  
 
 app.all("*",(req,res,next)=>{
     next(new ErrorClass(404,"Page not Found"));

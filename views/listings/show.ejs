@@ -47,12 +47,18 @@
   .buttons{
     display: flex;
   }
+  h2{
+    text-align: center;
+    font-style: italic;
+    color: #bd2130;
+  }
 </style>
 <body>
+  <h2><%= listing.title %></h2>
   <div class="card">
     <img src="<%= listing.image %>" class="card-img" alt="Listing Image">
     <div class="card-body">
-      <h5 class="card-title"><%= listing.title %></h5>
+      
       <p class="card-text"><%= listing.description %></p>
       <p class="card-text">&#8377;<%= listing.price.toLocaleString("en-IN") %> </p>
       <p class="card-text"><strong>Location:</strong> <%= listing.location %></p>
@@ -64,7 +70,55 @@
       <form action="/listings/<%= listing.id %>?_method=DELETE" method="POST">
         <button type="submit" class="btn btn-danger">Delete</button>
       </form>
+      
+      <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#review">
+        write a review
+      </button>
+      
+      
      </div>
-    
+     <div class="modal fade" id="review" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">review form</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+         <div class="modal-body">
+          <form>
+            <div class="form-group">
+              <label for="rate">Rate us</label>
+              <input type="range" class="form-control-range" id="rate" min="1" max="5" step="1">
+            </div>
+            <div class="form-group">
+              <label for="review">Write a review</label>
+              <textarea class="form-control" id="review" rows="5" cols="30"></textarea>
+            </div>
+            
+          </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <form action="listing/<%= listing.id %>/review" method="post">
+              <button type="button" class="btn btn-primary">Save changes</button>
+             </form>
+          </div>
+        </div>
+      </div>
+    </div>
+     
+
+    <!-- <form action="listing/<%= listing.id %>/review" method="post"> 
+      <div class="form-group">
+        <label for="rate">Rate us</label>
+        <input type="range" class="form-control-range" id="rate" min="1" max="5" step="1">
+      </div>
+      <div class="form-group">
+        <label for="review">Write a review</label>
+        <textarea class="form-control" id="review" rows="5" cols="30"></textarea>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+      
+    </form> -->
 
 </body>
