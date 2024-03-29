@@ -112,9 +112,10 @@ app.put('/listing/:id/edited', wrapAsync(async (req, res) => {
     res.redirect("/listing");
   }));
 
-app.post('listing/:id/review', async (req,res)=>{
-   console.log("hello")
-   
+app.post("/listing/:id/reviews", async (req,res)=>{
+   res.send("hello")
+   let resu= await listing.findById(req.params.id);
+   console.log(resu);
 })
   
 
