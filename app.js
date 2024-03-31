@@ -17,8 +17,12 @@ const engine = require("ejs-mate");
 app.engine('ejs', engine);
 const wrapAsync= require('./utils/wrapAsync')
 const ErrorClass= require('./utils/errorclass')
+const{ListingSchema,ReviewSchema}  = require('./schema')
 
+app.use(express.json());
 
+// Middleware to parse URL-encoded bodies
+app.use(express.urlencoded({ extended: true }));
 main()
     .then(() => {
         console.log("Connection Successfull");
@@ -28,6 +32,27 @@ main()
 async function main() {
     await mongoose.connect('mongodb://127.0.0.1:27017/listing');
 }
+
+const validateListing = (req, res, next) => {
+    let { error } = ListingSchema.validate(req.body);
+    if (error) {
+        let errMsg = error.details.map(el => el.message).join(",");
+        next(new ErrorClass(400, errMsg));
+    } else {
+        next();
+    }
+}
+
+const validateReview = (req, res, next) => {
+    let { error } = ReviewSchema.validate(req.body);
+    if (error) {
+        let errMsg = error.details.map(el => el.message).join(",");
+        next(new ErrorClass(400, errMsg));
+    } else {
+        next();
+    }
+}
+
 app.get('/',async(req,res)=>{
     res.send("hi i am home");
 })
@@ -51,11 +76,10 @@ app.get('/listing/details/:id', wrapAsync(async (req, res) => {
     await res.render("newlisting.ejs");
 }))
 
-app.post('/newlisting', wrapAsync(async (req, res,next) => {
-    if(!req.body.Listing){
-        throw new ErrorClass(404,"bad request")
-    }
-    
+app.post('/newlisting', validateListing, wrapAsync(async (req, res,next) => {
+   
+   
+   console.log(result)
         let { title, description, image, price, location, country } = req.body;
 
         const newlist = new Listing({
@@ -85,7 +109,7 @@ app.get('/listing/:id/edit', wrapAsync(
     }
 ))
 
-app.put('/listing/:id/edited', wrapAsync(async (req, res) => {
+app.put('/listing/:id/edited', validateListing, wrapAsync(async (req, res) => {
     
         let id = req.params.id;
         let { title, description, image, price, location, country } = req.body;
@@ -112,11 +136,14 @@ app.put('/listing/:id/edited', wrapAsync(async (req, res) => {
     res.redirect("/listing");
   }));
 
-app.post("/listing/:id/reviews", async (req,res)=>{
-   res.send("hello")
-   let resu= await listing.findById(req.params.id);
-   console.log(resu);
-})
+
+  app.post("/listing/:id/reviews",  wrapAsync(async (req, res) => {
+    let {rate, review} = req.body;
+    console.log(req.body);
+}));
+
+
+
   
 
 app.all("*",(req,res,next)=>{
