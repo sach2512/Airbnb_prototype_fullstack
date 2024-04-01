@@ -68,7 +68,7 @@
       <form action="/listing/<%= listing.id %>/edit" method="GET">
         <button type="submit" class="btn btn-primary">Edit</button>
       </form> 
-      <form action="/listings/<%= listing.id %>?_method=DELETE" method="POST">
+      <form action="/listing/<%= listing.id %>?_method=DELETE" method="POST">
         <button type="submit" class="btn btn-danger">Delete</button>
       </form>
       
@@ -121,7 +121,7 @@
         <h5 class="card-title">John</h5>
         <p class="card-text">Review: <%= review.rating %></p>
         <p class="card-text">Review: <%= review.review %></p>
-        <form action='/listing/<%=listing.id%>/review/<%=review.id%>?_method=DELETE' method="post">
+        <form action='/listing/<%=listing.id%>/reviews/<%=review.id%>?_method=DELETE' method="post">
           <button type="submit" class="btn btn-sm btn-danger">delete review</button>
         </form>
       </div>
