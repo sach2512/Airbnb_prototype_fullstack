@@ -17,7 +17,8 @@ const engine = require("ejs-mate");
 app.engine('ejs', engine);
 const wrapAsync= require('./utils/wrapAsync')
 const ErrorClass= require('./utils/errorclass')
-const{ListingSchema,ReviewSchema}  = require('./schema')
+const{ListingSchema,ReviewSchema}  = require('./schema');
+const { log } = require("console");
 
 app.use(express.json());
 
@@ -66,7 +67,7 @@ app.get('/listing', wrapAsync(async (req, res) => {
 app.get('/listing/details/:id', wrapAsync(async (req, res) => {
     let id = req.params.id;
     //console.log(id);
-    const listing = await Listing.findById(id);
+    const listing = await Listing.findById(id).populate("review");
     res.render("show.ejs", { listing });
 
 }))
@@ -138,10 +139,34 @@ app.put('/listing/:id/edited', validateListing, wrapAsync(async (req, res) => {
 
 
   app.post("/listing/:id/reviews",  wrapAsync(async (req, res) => {
-    let {rate, review} = req.body;
-    console.log(req.body);
+    const { rate, review } = req.body;
+    const listing = await Listing.findById(req.params.id);
+    const newReview = new reviews({
+        rating: rate,
+        review: review
+    });
+    await newReview.save();
+    listing.review.push(newReview);
+    await listing.save();
+    console.log(listing);
+    res.redirect(`/listing/details/${req.params.id}`);
+   
+ 
+   
+
 }));
 
+app.delete('/listing/:id/review/:reviewid',wrapAsync(async(req,res)=>{
+        
+       let id= req.params.id;
+       let reviewid = req.params.reviewid;
+
+       
+       await Listing.findByIdAndUpdate(id, { $pull: { reviews: reviewid } });
+
+       await reviews.findByIdAndDelete(reviewid);
+       res.redirect(`/listing/details/${req.params.id}`);
+}))
 
 
   

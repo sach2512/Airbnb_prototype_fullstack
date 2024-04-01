@@ -58,3 +58,12 @@
     border: 0;
     border-top: 1px solid #ccc;
   }
+
+  .card-deck{
+    border: 2px solid red;
+  }
+
+  .reviewcard{
+    margin-left: 0%;
+    border: 2px solid red;
+  }

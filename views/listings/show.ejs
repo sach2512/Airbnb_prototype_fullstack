@@ -1,6 +1,6 @@
 <% layout("../layouts/boilerplate.ejs")-%>
 <style>
-  .card {
+  .listing-card {
     margin: 20px;
     border-radius: 15px;
     box-shadow: 0 4px 8px rgba(0,0,0,0.1);
@@ -8,7 +8,7 @@
     margin-left: 30%;
     
   }
-  .card-body {
+  .listingcardbody {
     padding: 20px;
   }
   .card-title {
@@ -56,9 +56,9 @@
 
 <body>
   <h2><%= listing.title %></h2>
-  <div class="card">
+  <div class="listing-card">
     <img src="<%= listing.image %>" class="card-img" alt="Listing Image">
-    <div class="card-body">
+    <div class="card-body listingcardbody">
       
       <p class="card-text"><%= listing.description %></p>
       <p class="card-text">&#8377;<%= listing.price.toLocaleString("en-IN") %> </p>
@@ -86,10 +86,11 @@
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
          <div class="modal-body">
-          <form class="needs-validation" novalidate>
+          <form class="needs-validation" action="/listing/<%= listing.id %>/reviews" method="post" novalidate>
             <div class="form-group">
               <label for="rate">Rating</label>
-              <input type="range" class="form-control-range" id="rate" name="rate" min="1" max="5" step="1">
+              <input type="range" class="form-control-range" id="rate" name="rate" min="1" max="5" step="1" value="0" required>
+              <div class="invalid-feedback">Please provide a rating.</div>
               
             </div>
             <div class="form-group">
@@ -97,23 +98,46 @@
                 <textarea class="form-control" id="review" name="review" rows="5" cols="30" required></textarea>
                 <div class="invalid-feedback">Please provide a review.</div>
             </div>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            
+            <button type="submit" class="btn btn-primary">Save changes</button>
             
         </form>
         
           </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            <form action="/listing/<%= listing.id %>/reviews" method="post">
-              <button type="submit" class="btn btn-primary">Save changes</button>
-             </form>
-          </div>
+         
         </div>
       </div>
     </div>
      
 <hr>
-<h1>all reviews</h1>
-<p><%=listing.review%></p>
+<hr>
+<h3>All Reviews</h3>
+
+
+  <% for (let review of listing.review) { %>
+    <div class="card " id="reviewcard">
+      <div class="card-body">
+        <h5 class="card-title">John</h5>
+        <p class="card-text">Review: <%= review.rating %></p>
+        <p class="card-text">Review: <%= review.review %></p>
+        <form action='/listing/<%=listing.id%>/review/<%=review.id%>?_method=DELETE' method="post">
+          <button type="submit" class="btn btn-sm btn-danger">delete review</button>
+        </form>
+      </div>
+    </div>
+  <% } %>
+
+
+
+
+
+
+
+
+
+
+
    
     <script src="/script.js/validation.js"></script>
 
