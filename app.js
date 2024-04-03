@@ -22,18 +22,21 @@ const ErrorClass= require('./utils/errorclass')
 const listing= require('./routes/listing');
 const review= require('./routes/review');
 const session= require("express-session");
+const flash= require("connect-flash");
 
 const sessionOptions = {
     secret: "mysecretkey",
     resave: false,
     saveUninitialized: true,
     cookie:{
-        expires: Date.now()+7*24*60*60*1000,
-        maxAge:21*24*60*60*1000,
-        
+        expires: Date.now()+15*24*60*60*1000,//// Expires after 21 days
+        maxAge:21*24*60*60*1000, //// Expires after 21 days of inactivity
+        httpOnly:true,
+
 
     }
 };
+app.use(flash())
 
 app.use(session(sessionOptions));
 
@@ -55,6 +58,11 @@ async function main() {
 app.get('/',async(req,res)=>{
     res.send("hi i am home");
 })
+
+// app.use((req,res,next)=>{
+//     res.locals.success= req.flash("success");
+//     next()
+// })
 
 app.use('/listing',listing);//here meaning is konsi bhi requiest /listing kaan aiye tho it will pass through these middleware and we have required listing routes in listing variablw
 
