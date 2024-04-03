@@ -66,7 +66,7 @@ router.get('/:id/edit', wrapAsync(
     }
 ))
 
-router.put('/:id/edited', validateListing, wrapAsync(async (req, res) => {
+router.put('/:id/edited',  wrapAsync(async (req, res) => {
     
         let id = req.params.id;
         let { title, description, image, price, location, country } = req.body;

@@ -21,6 +21,21 @@ const ErrorClass= require('./utils/errorclass')
 //const { log } = require("console");
 const listing= require('./routes/listing');
 const review= require('./routes/review');
+const session= require("express-session");
+
+const sessionOptions = {
+    secret: "mysecretkey",
+    resave: false,
+    saveUninitialized: true,
+    cookie:{
+        expires: Date.now()+7*24*60*60*1000,
+        maxAge:21*24*60*60*1000,
+        
+
+    }
+};
+
+app.use(session(sessionOptions));
 
 app.use(express.json());
 
