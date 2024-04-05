@@ -51,8 +51,8 @@ router.post('/newlisting',  wrapAsync(async (req, res,next) => {
             country: country
         });
         await newlist.save();
-        req.flash("sucess","listing added sucessfully")
-        res.locals.msg=req.flash("success");
+        req.flash("success","listing added sucessfully")
+        
         res.redirect('/listing');
    
     

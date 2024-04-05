@@ -8,7 +8,8 @@ const data = require('./data/data');
 //const Listing = require("./models/listingmodel");
 app.set("view engine", "ejs");
 const path= require("path");
-app.set("views", "./views/listings");
+//app.set("views", "./views/listings");
+app.set("views", "./views/users");
 app.use(express.static('./public'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -23,7 +24,24 @@ const listing= require('./routes/listing');
 const review= require('./routes/review');
 const session= require("express-session");
 const flash= require("connect-flash");
+const passport= require("passport");
+const User= require('./models/user.js')
+const LocalStrategy = require('passport-local').Strategy;
+// now we need to cinfigure passport
 
+// thse means we are telling how users will be authenticated in your application,
+// use static authenticate method of model in LocalStrategy
+//passport.use(new LocalStrategy(User.authenticate()));
+//passport.use(new LocalStrategy(User.authenticate()));
+ ////The first line configures Passport to use the LocalStrategy, which is typically used for authenticating users based on locally stored credentials.
+//local strategy is authenticating users based on a username and password stored locally within the application's database.
+//passport.use(User.createStrategy()) //The line configures Passport to use a strategy specifically designed for creating (registering) new users and simultaneously authenticating them, typically used in registration routes.
+// passport.amazonstategy for logining in users with amazon id
+
+// use static serialize and deserialize of model for passport session support
+//passport.serializeUser(User.serializeUser()); // defines how user information is stored in the session.
+//passport.deserializeUser(User.deserializeUser()); //defines how user information is retrieved from the session.
+// then use sesions
 const sessionOptions = {
     secret: "mysecretkey",
     resave: false,
@@ -42,6 +60,10 @@ app.use(session(sessionOptions));
 
 app.use(express.json());
 
+// then intiallize passport and sesion
+
+app.use(passport.initialize());
+app.use(passport.session());
 // Middleware to parse URL-encoded bodies
 app.use(express.urlencoded({ extended: true }));
 main()
@@ -59,10 +81,26 @@ app.get('/',async(req,res)=>{
     res.send("hi i am home");
 })
 
-// app.use((req,res,next)=>{
-//     res.locals.success= req.flash("success");
-//     next()
-// })
+
+app.get('/user/signup', (req, res) => {
+    res.render("/users/signup.ejs");
+});
+
+
+app.use((req,res,next)=>{
+    res.locals.success= req.flash("success");
+    next()
+})
+
+app.get('/demo',async (req,res)=>{
+    let firstuser= new user({
+        userName:"sachin",
+        email:"sachinjaing494@gmail.com",
+
+    })
+    await User.register(firstuser);
+    res.send(firstuser)
+})
 
 app.use('/listing',listing);//here meaning is konsi bhi requiest /listing kaan aiye tho it will pass through these middleware and we have required listing routes in listing variablw
 
