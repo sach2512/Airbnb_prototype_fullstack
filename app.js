@@ -28,21 +28,7 @@ const flash= require("connect-flash");
 const passport= require("passport");
 const User= require('./models/user.js')
 const LocalStrategy = require('passport-local').Strategy;
-// now we need to cinfigure passport
 
-// thse means we are telling how users will be authenticated in your application,
-// use static authenticate method of model in LocalStrategy
-//passport.use(new LocalStrategy(User.authenticate()));
-//passport.use(new LocalStrategy(User.authenticate()));
- ////The first line configures Passport to use the LocalStrategy, which is typically used for authenticating users based on locally stored credentials.
-//local strategy is authenticating users based on a username and password stored locally within the application's database.
-//passport.use(User.createStrategy()) //The line configures Passport to use a strategy specifically designed for creating (registering) new users and simultaneously authenticating them, typically used in registration routes.
-// passport.amazonstategy for logining in users with amazon id
-
-// use static serialize and deserialize of model for passport session support
-//passport.serializeUser(User.serializeUser()); // defines how user information is stored in the session.
-//passport.deserializeUser(User.deserializeUser()); //defines how user information is retrieved from the session.
-// then use sesions
 const sessionOptions = {
     secret: "mysecretkey",
     resave: false,
@@ -65,6 +51,21 @@ app.use(express.json());
 
 app.use(passport.initialize());
 app.use(passport.session());
+// now we need to cinfigure passport
+
+// thse means we are telling how users will be authenticated in your application,
+// use static authenticate method of model in LocalStrategy
+passport.use(new LocalStrategy(User.authenticate()));
+//passport.use(new LocalStrategy(User.authenticate()));
+ ////The first line configures Passport to use the LocalStrategy, which is typically used for authenticating users based on locally stored credentials.
+//local strategy is authenticating users based on a username and password stored locally within the application's database.
+//passport.use(User.createStrategy()) //The line configures Passport to use a strategy specifically designed for creating (registering) new users and simultaneously authenticating them, typically used in registration routes.
+// passport.amazonstategy for logining in users with amazon id
+
+// use static serialize and deserialize of model for passport session support
+passport.serializeUser(User.serializeUser()); // defines how user information is stored in the session.
+passport.deserializeUser(User.deserializeUser()); //defines how user information is retrieved from the session.
+// then use sesions
 // Middleware to parse URL-encoded bodies
 app.use(express.urlencoded({ extended: true }));
 main()
@@ -101,19 +102,17 @@ app.use('/listing',listing);//here meaning is konsi bhi requiest /listing kaan a
 
 app.use('/listing/:id/reviews',review)
 
-app.get('/demo',async (req,res)=>{
-    let firstuser= new user({
-        userName:"sachin",
-        email:"sachinjaing494@gmail.com",
+// app.get('/demo',async (req,res)=>{
+//     let firstuser= new user({
+//         userName:"sachin",
+//         email:"sachinjaing494@gmail.com",
 
-    })
-    let reguser=await User.register(firstuser,"helloworld");
-    res.send(reguser)
-})
+//     })
+//     let reguser=await User.register(firstuser,"helloworld");
+//     res.send(reguser)
+// })
 
-app.get('/user/signup', (req, res) => {
-    res.render("signup.ejs");
-});
+
 
 app.all("*",(req,res,next)=>{
     next(new ErrorClass(404,"Page not Found"));
