@@ -1,25 +1,26 @@
 const express = require("express");
 const mongoose = require("mongoose");
-//const reviews = require('./models/reviewmodel')
+
 const port = 8080;
 const app = express();
 const methodOverride = require("method-override");
 const data = require('./data/data');
-//const Listing = require("./models/listingmodel");
+
 app.set("view engine", "ejs");
 const path= require("path");
 //app.set("views", "./views/listings");
-app.set("views", "./views/users");
-app.use(express.static('./public'));
+
+//app.use(express.static('./public'));
+app.set("views", path.join(__dirname,"views/listings"));
+app.use(express.static(path.join(__dirname, "public")));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
 const engine = require("ejs-mate");
 app.engine('ejs', engine);
-//const wrapAsync= require('./utils/wrapAsync')
+
 const ErrorClass= require('./utils/errorclass')
-//const{ListingSchema,ReviewSchema}  = require('./schema');
-//const { log } = require("console");
+
 const listing= require('./routes/listing');
 const review= require('./routes/review');
 const session= require("express-session");
@@ -82,15 +83,23 @@ app.get('/',async(req,res)=>{
 })
 
 
-app.get('/user/signup', (req, res) => {
-    res.render("/users/signup.ejs");
-});
+
 
 
 app.use((req,res,next)=>{
     res.locals.success= req.flash("success");
+    res.locals.fail= req.flash("fail");
+    
     next()
-})
+}) 
+
+  
+
+
+
+app.use('/listing',listing);//here meaning is konsi bhi requiest /listing kaan aiye tho it will pass through these middleware and we have required listing routes in listing variablw
+
+app.use('/listing/:id/reviews',review)
 
 app.get('/demo',async (req,res)=>{
     let firstuser= new user({
@@ -98,15 +107,13 @@ app.get('/demo',async (req,res)=>{
         email:"sachinjaing494@gmail.com",
 
     })
-    await User.register(firstuser);
-    res.send(firstuser)
+    let reguser=await User.register(firstuser,"helloworld");
+    res.send(reguser)
 })
 
-app.use('/listing',listing);//here meaning is konsi bhi requiest /listing kaan aiye tho it will pass through these middleware and we have required listing routes in listing variablw
-
-app.use('/listing/:id/reviews',review)
-
-
+app.get('/user/signup', (req, res) => {
+    res.render("signup.ejs");
+});
 
 app.all("*",(req,res,next)=>{
     next(new ErrorClass(404,"Page not Found"));

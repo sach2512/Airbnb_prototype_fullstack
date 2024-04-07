@@ -46,7 +46,8 @@
         background-color: #45a049;
     }
 </style>
-<% layout('../layouts/boilerplate.ejs') -%>
+<%- layout('../layouts/boilerplate.ejs') %>
+
 <body>
 
 <form action="/listing/<%=listing.id%>/edited?_method=PUT" method="post" class="needs-validation" novalidate>

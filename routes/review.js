@@ -32,7 +32,7 @@ router.post("/",  wrapAsync(async (req, res) => {
     await listing.save();
     console.log(listing)
     console.log(newReview);
-   
+   req.flash("success","review added successfully")
     res.redirect(`/listing/details/${req.params.id}`);
    
  
@@ -44,16 +44,17 @@ router.delete('/:reviewid',wrapAsync(async(req,res)=>{
         
     let id= req.params.id;
     let reviewid = req.params.reviewid;
+   
+   
+     req.flash("success","review  deleted successfully")
+    await reviews.findByIdAndDelete(reviewid);
+   
+    res.redirect(`/listing/details/${req.params.id}`);
     listingSchema.post("findOneAndDelete",
     async (listing) => {
    if(listing){
        await reviews.deleteMany({ _id: { $in: listing.reviews } });
    }});
-    
-    
-
-    await reviews.findByIdAndDelete(reviewid);
-    res.redirect(`/listing/details/${req.params.id}`);
 }))
 
 module.exports=router;
