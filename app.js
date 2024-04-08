@@ -55,7 +55,7 @@ app.use(passport.session());
 
 // thse means we are telling how users will be authenticated in your application,
 // use static authenticate method of model in LocalStrategy
-passport.use(new LocalStrategy(User.authenticate()));
+//passport.use(new LocalStrategy(User.authenticate()));
 //passport.use(new LocalStrategy(User.authenticate()));
  ////The first line configures Passport to use the LocalStrategy, which is typically used for authenticating users based on locally stored credentials.
 //local strategy is authenticating users based on a username and password stored locally within the application's database.
@@ -63,8 +63,8 @@ passport.use(new LocalStrategy(User.authenticate()));
 // passport.amazonstategy for logining in users with amazon id
 
 // use static serialize and deserialize of model for passport session support
-passport.serializeUser(User.serializeUser()); // defines how user information is stored in the session.
-passport.deserializeUser(User.deserializeUser()); //defines how user information is retrieved from the session.
+//passport.serializeUser(User.serializeUser()); // defines how user information is stored in the session.
+//passport.deserializeUser(User.deserializeUser()); //defines how user information is retrieved from the session.
 // then use sesions
 // Middleware to parse URL-encoded bodies
 app.use(express.urlencoded({ extended: true }));
@@ -95,22 +95,22 @@ app.use((req,res,next)=>{
 }) 
 
   
+app.get('/demo',async (req,res)=>{
+    let firstuser= new user({
+        userName:"sachin",
+        email:"sachinjaing494@gmail.com",
 
+    })
+    let reguser=await User.register(firstuser,"helloworld");
+    res.send(reguser)
+})
 
 
 app.use('/listing',listing);//here meaning is konsi bhi requiest /listing kaan aiye tho it will pass through these middleware and we have required listing routes in listing variablw
 
 app.use('/listing/:id/reviews',review)
 
-// app.get('/demo',async (req,res)=>{
-//     let firstuser= new user({
-//         userName:"sachin",
-//         email:"sachinjaing494@gmail.com",
 
-//     })
-//     let reguser=await User.register(firstuser,"helloworld");
-//     res.send(reguser)
-// })
 
 
 
