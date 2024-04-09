@@ -119,12 +119,12 @@ app.get('/user/login',(req,res)=>{
 })
 
 app.post('/login', 
-
+savedRedirectUrl,
 passport.authenticate("local", { failureRedirect: '/user/login', failureflash: true }), async (req, res) => {
     req.flash("success","you are logged in")
     let redirectUrl= res.locals.redirectUrl||'/listing'
     console.log(redirectUrl)
-    res.redirect( '/listing');
+    res.redirect( redirectUrl);
  })
 
  app.get('/user/logout',(req,res,next)=>{
