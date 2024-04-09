@@ -4,7 +4,8 @@ const methodOverride = require("method-override");
 const Listing = require("../models/listingmodel");
 const{ListingSchema}  = require('../schema');
 const wrapAsync= require('../utils/wrapAsync')
-const ErrorClass= require('../utils/errorclass')
+const ErrorClass= require('../utils/errorclass');
+const isloggedin= require("../middlewares/isloggedin");
 
 const validateListing = (req, res, next) => {
     let { error } = ListingSchema.validate(req.body);
@@ -36,8 +37,10 @@ router.get('/details/:id', wrapAsync(async (req, res) => {
 
 //create route
 
-router.get('/new', wrapAsync(async (req, res) => {
-    await res.render("newlisting.ejs");
+router.get('/new', isloggedin, wrapAsync(async (req, res) => {
+   
+    await res.render("newlisting.ejs")
+    
 }))
 
 router.post('/newlisting',  wrapAsync(async (req, res,next) => {
@@ -63,7 +66,7 @@ router.post('/newlisting',  wrapAsync(async (req, res,next) => {
 }));
 
 //edit route
-router.get('/:id/edit', wrapAsync(
+router.get('/:id/edit', isloggedin, wrapAsync(
     async (req, res) => {
         let id = req.params.id;
         let listing = await Listing.findById(id);
@@ -94,7 +97,7 @@ router.put('/:id/edited',  wrapAsync(async (req, res) => {
 
 //delete route
 
-router.delete("/:id", wrapAsync(async (req, res) => {
+router.delete("/:id", isloggedin, wrapAsync(async (req, res) => {
     let { id } = req.params;
     let deletedListing = await Listing.findByIdAndDelete(id);
     console.log(deletedListing);

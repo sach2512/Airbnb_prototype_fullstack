@@ -18,7 +18,8 @@ const UserSchema= new Schema({
 //    }             // in passport local mongoose it automatically stores name and password by adding salting and hashing  even if we define or dnt define in mongoose
 
 })
-const user= mongoose.model('user',UserSchema);
+
 UserSchema.plugin(PassportLocalMongoose);// we are passing as plugin in our schema we used as pluginbecause automatically implemets saltinh hashing
 
+const User= mongoose.model('User',UserSchema);
 module.exports=User;

@@ -1,0 +1,59 @@
+<%- layout('../layouts/boilerplate.ejs') %>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+    }
+    .login-container {
+        width: 300px;
+        margin: 0 auto;
+        margin-top: 100px;
+        padding: 20px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    .form-group {
+        margin-bottom: 20px;
+    }
+    .form-group label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: bold;
+    }
+    .form-group input {
+        width: 100%;
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 3px;
+    }
+    .form-group input[type="submit"] {
+        background-color: #007bff;
+        color: #fff;
+        cursor: pointer;
+    }
+    .member-link a:hover {
+        text-decoration: underline;
+    }
+</style>
+</head>
+<body>
+<div class="login-container">
+    <h2>Login</h2>
+    <form action="/login" method="POST">
+        <div class="form-group">
+            <label for="username">Username</label>
+            <input type="text" id="username" name="username" placeholder="Enter your username" required>
+        </div>
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" placeholder="Enter your password" required>
+        </div>
+        <div class="form-group">
+            <input type="submit" value="Login">
+        </div>
+    </form>
+    <div class="member-link">
+        <p>Not a member? <a href='/user/signup'>Signup</a></p>
+    </div>
+</div>
+</body>

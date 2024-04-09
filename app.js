@@ -21,13 +21,28 @@ app.engine('ejs', engine);
 
 const ErrorClass= require('./utils/errorclass')
 
-const listing= require('./routes/listing');
-const review= require('./routes/review');
+const listingrouter= require('./routes/listing');
+const reviewrouter= require('./routes/review');
+//const userrouter= require('./routes/user')
 const session= require("express-session");
 const flash= require("connect-flash");
 const passport= require("passport");
 const User= require('./models/user.js')
-const LocalStrategy = require('passport-local').Strategy;
+const LocalStrategy = require('passport-local');
+const savedRedirectUrl = require('./middlewares/isloggedin.js')
+main()
+    .then(() => {
+        console.log("Connection Successfull");
+    })
+    .catch(err => console.log(err));
+
+async function main() {
+    await mongoose.connect('mongodb://127.0.0.1:27017/listing');
+}
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(flash())
 
 const sessionOptions = {
     secret: "mysecretkey",
@@ -41,42 +56,20 @@ const sessionOptions = {
 
     }
 };
-app.use(flash())
-
 app.use(session(sessionOptions));
-
-app.use(express.json());
-
-// then intiallize passport and sesion
-
+app.use((req,res,next)=>{
+    res.locals.success= req.flash("success");
+    res.locals.fail= req.flash("fail");
+    res.locals.user= req.user;
+    
+    next()
+})
 app.use(passport.initialize());
 app.use(passport.session());
-// now we need to cinfigure passport
+passport.use(new LocalStrategy(User.authenticate()));
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
 
-// thse means we are telling how users will be authenticated in your application,
-// use static authenticate method of model in LocalStrategy
-//passport.use(new LocalStrategy(User.authenticate()));
-//passport.use(new LocalStrategy(User.authenticate()));
- ////The first line configures Passport to use the LocalStrategy, which is typically used for authenticating users based on locally stored credentials.
-//local strategy is authenticating users based on a username and password stored locally within the application's database.
-//passport.use(User.createStrategy()) //The line configures Passport to use a strategy specifically designed for creating (registering) new users and simultaneously authenticating them, typically used in registration routes.
-// passport.amazonstategy for logining in users with amazon id
-
-// use static serialize and deserialize of model for passport session support
-//passport.serializeUser(User.serializeUser()); // defines how user information is stored in the session.
-//passport.deserializeUser(User.deserializeUser()); //defines how user information is retrieved from the session.
-// then use sesions
-// Middleware to parse URL-encoded bodies
-app.use(express.urlencoded({ extended: true }));
-main()
-    .then(() => {
-        console.log("Connection Successfull");
-    })
-    .catch(err => console.log(err));
-
-async function main() {
-    await mongoose.connect('mongodb://127.0.0.1:27017/listing');
-}
 
 
 app.get('/',async(req,res)=>{
@@ -84,34 +77,69 @@ app.get('/',async(req,res)=>{
 })
 
 
-
-
-
-app.use((req,res,next)=>{
-    res.locals.success= req.flash("success");
-    res.locals.fail= req.flash("fail");
-    
-    next()
-}) 
-
-  
-app.get('/demo',async (req,res)=>{
-    let firstuser= new user({
-        userName:"sachin",
-        email:"sachinjaing494@gmail.com",
-
-    })
-    let reguser=await User.register(firstuser,"helloworld");
-    res.send(reguser)
+//app.use('/user',userrouter);
+app.get('/user/signup',(req,res)=>{
+    res.render("signup.ejs")
 })
 
+app.post('/signup', async (req, res) => {
+    try {
+        const { username, email, password } = req.body;
 
-app.use('/listing',listing);//here meaning is konsi bhi requiest /listing kaan aiye tho it will pass through these middleware and we have required listing routes in listing variablw
+       
+        const user = new User({
+            email: email,
+            username: username,
+           password: password
+        });
 
-app.use('/listing/:id/reviews',review)
+        
+       const registeredUser= await User.register(user, password);
+       req.login(registeredUser,(err)=>{
+        if(err){
+           return next(err)
+        }else{
+            req.flash("success", "Signup successful ,you are logged in");
+            res.redirect('/listing');
+        }
+       })
+
+       
+    } catch (error) {
+       
+        console.log(error);
+        req.flash("error", "Signup failed");
+        res.redirect('/signup'); 
+    }
+});
 
 
+app.get('/user/login',(req,res)=>{
+    res.render("login.ejs");
+})
 
+app.post('/login', 
+
+passport.authenticate("local", { failureRedirect: '/user/login', failureflash: true }), async (req, res) => {
+    req.flash("success","you are logged in")
+    let redirectUrl= res.locals.redirectUrl||'/listing'
+    console.log(redirectUrl)
+    res.redirect( '/listing');
+ })
+
+ app.get('/user/logout',(req,res,next)=>{
+    req.logout((err)=>{
+       if(err){
+        next(err)
+       }else{
+        req.flash("success","you are loged out!");
+        res.redirect('/listing');
+       }
+    })
+ })
+app.use('/listing',listingrouter);
+
+app.use('/listing/:id/reviews',reviewrouter)
 
 
 app.all("*",(req,res,next)=>{
