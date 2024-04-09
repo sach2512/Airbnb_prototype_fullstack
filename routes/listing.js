@@ -5,7 +5,7 @@ const Listing = require("../models/listingmodel");
 const{ListingSchema}  = require('../schema');
 const wrapAsync= require('../utils/wrapAsync')
 const ErrorClass= require('../utils/errorclass');
-const isloggedin= require("../middlewares/isloggedin");
+const {isloggedin}= require("../middlewares/isloggedin");
 
 const validateListing = (req, res, next) => {
     let { error } = ListingSchema.validate(req.body);

@@ -30,6 +30,7 @@ const passport= require("passport");
 const User= require('./models/user.js')
 const LocalStrategy = require('passport-local');
 const savedRedirectUrl = require('./middlewares/isloggedin.js')
+
 main()
     .then(() => {
         console.log("Connection Successfull");
