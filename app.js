@@ -29,7 +29,7 @@ const flash= require("connect-flash");
 const passport= require("passport");
 const User= require('./models/user.js')
 const LocalStrategy = require('passport-local');
-const savedRedirectUrl = require('./middlewares/isloggedin.js')
+const savedRedirectUrl = require('./middlewares/isloggedin.js');
 
 main()
     .then(() => {
@@ -120,12 +120,16 @@ app.get('/user/login',(req,res)=>{
 })
 
 app.post('/login', 
-savedRedirectUrl,
-passport.authenticate("local", { failureRedirect: '/user/login', failureflash: true }), async (req, res) => {
+
+passport.authenticate("local", { failureRedirect: '/user/login', failflash: true }), async (req, res) => {
     req.flash("success","you are logged in")
-    let redirectUrl= res.locals.redirectUrl||'/listing'
-    console.log(redirectUrl)
-    res.redirect( redirectUrl);
+    console.log(`the reques yser id is ${req.user._id}`);
+    // let redirectUrl= res.locals.redirectUrl||'/listing'
+    //console.log(res.locals.redirectUrl)
+    //res.redirect(res.locals.redirectUrl);
+    res.redirect('/listing');
+   // res.redirect(redirectUrl);
+    //console.log(`the redirect url is : ${redirectUrl}`);
  })
 
  app.get('/user/logout',(req,res,next)=>{

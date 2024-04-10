@@ -60,18 +60,25 @@
   <div class="listing-card">
     <img src="<%= listing.image %>" class="card-img" alt="Listing Image">
     <div class="card-body listingcardbody">
+      <p class="card-text">owned by ! <%= listing.owner.email %></p>
+      <p class="card-text">owned by ! <%= listing.owner._id %></p>
       
       <p class="card-text"><%= listing.description %></p>
       <p class="card-text">&#8377;<%= listing.price.toLocaleString("en-IN") %> </p>
       <p class="card-text"><strong>Location:</strong> <%= listing.location %></p>
       <p class="card-text"><strong>Country:</strong> <%= listing.country %></p>
      <div class="buttons">
-      <form action="/listing/<%= listing.id %>/edit" method="GET">
-        <button type="submit" class="btn btn-primary">Edit</button>
-      </form> 
-      <form action="/listing/<%= listing.id %>?_method=DELETE" method="POST">
-        <button type="submit" class="btn btn-danger">Delete</button>
-      </form>
+      <% if (user && user._id === listing.owner._id) { %>
+        <form action="/listing/<%= listing.id %>/edit" method="GET">
+          <button type="submit" class="btn btn-primary">Edit</button>
+        </form>
+        <form action="/listing/<%= listing.id %>?_method=DELETE" method="POST">
+          <button type="submit" class="btn btn-danger">Delete</button>
+        </form>
+      <% } %>
+  
+  
+      
       
       <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#review">
         write a review
