@@ -63,6 +63,7 @@
       <p class="card-text">owned by ! <%= listing.owner.email %></p>
       <p class="card-text">owned by ! <%= listing.owner._id %></p>
       
+      
       <p class="card-text"><%= listing.description %></p>
       <p class="card-text">&#8377;<%= listing.price.toLocaleString("en-IN") %> </p>
       <p class="card-text"><strong>Location:</strong> <%= listing.location %></p>
@@ -76,6 +77,13 @@
           <button type="submit" class="btn btn-danger">Delete</button>
         </form>
       <% } %>
+      
+
+    
+      <% console.log("Listing Owner:", listing.owner._id); %>
+      <% console.log("User:", user); %>
+
+      
   
   
       
@@ -148,5 +156,7 @@
 
    
     <script src="/script.js/validation.js"></script>
+ 
+
 
 </body>

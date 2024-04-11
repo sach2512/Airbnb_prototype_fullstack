@@ -32,8 +32,8 @@ router.get('/details/:id', wrapAsync(async (req, res) => {
         req.flash("fail","listing not found")
         res.redirect('/listing')
     }
-    res.render("show.ejs", { listing });
-    console.log(listing);
+    res.render("show.ejs", { listing, user: req.user });
+    //console.log(listing);
 
 }))
 
@@ -74,7 +74,7 @@ router.get('/:id/edit', isloggedin, wrapAsync(
         let id = req.params.id;
         let listing = await Listing.findById(id);
         res.render("edit.ejs", { listing });
-        console.log(listing);
+        //console.log(listing);
     }
 ))
 
