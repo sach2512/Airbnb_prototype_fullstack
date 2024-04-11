@@ -66,8 +66,9 @@ app.use((req,res,next)=>{
     next()
 })
 app.use((req, res, next) => {
-    console.log('req.user:', req.user); // Log req.user
+    //console.log('req.user:', req.user); // Log req.user
     res.locals.user = req.user; // Set res.locals.user
+    console.log('req.user:', req.user);
     next();
 });
 
