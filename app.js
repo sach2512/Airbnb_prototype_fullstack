@@ -10,7 +10,7 @@ app.set("view engine", "ejs");
 const path= require("path");
 //app.set("views", "./views/listings");
 
-//app.use(express.static('./public'));
+app.use(express.static('./public'));
 app.set("views", path.join(__dirname,"views/listings"));
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.json());
@@ -29,7 +29,7 @@ const flash= require("connect-flash");
 const passport= require("passport");
 const User= require('./models/user.js')
 const LocalStrategy = require('passport-local');
-const savedRedirectUrl = require('./middlewares/isloggedin.js');
+const {savedRedirectUrl} = require('./middlewares/isloggedin.js');
 
 main()
     .then(() => {
@@ -119,16 +119,16 @@ app.get('/user/login',(req,res)=>{
     res.render("login.ejs");
 })
 
-app.post('/login', 
+app.post('/login', savedRedirectUrl,
 
 passport.authenticate("local", { failureRedirect: '/user/login', failflash: true }), async (req, res) => {
     req.flash("success","you are logged in")
     console.log(`the reques yser id is ${req.user._id}`);
-    // let redirectUrl= res.locals.redirectUrl||'/listing'
+    let redirectUrl= res.locals.redirectUrl||'/listing'
     //console.log(res.locals.redirectUrl)
     //res.redirect(res.locals.redirectUrl);
-    res.redirect('/listing');
-   // res.redirect(redirectUrl);
+    //res.redirect('/listing');
+   res.redirect(redirectUrl);
     //console.log(`the redirect url is : ${redirectUrl}`);
  })
 

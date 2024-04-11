@@ -68,7 +68,7 @@
       <p class="card-text"><strong>Location:</strong> <%= listing.location %></p>
       <p class="card-text"><strong>Country:</strong> <%= listing.country %></p>
      <div class="buttons">
-      <% if (user && user._id === listing.owner._id) { %>
+      <% if (user && user._id.equals( listing.owner._id)) { %>
         <form action="/listing/<%= listing.id %>/edit" method="GET">
           <button type="submit" class="btn btn-primary">Edit</button>
         </form>
