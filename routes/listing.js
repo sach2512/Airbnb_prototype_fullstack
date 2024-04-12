@@ -5,7 +5,7 @@ const Listing = require("../models/listingmodel");
 const{ListingSchema}  = require('../schema');
 const wrapAsync= require('../utils/wrapAsync')
 const ErrorClass= require('../utils/errorclass');
-const {isloggedin}= require("../middlewares/isloggedin");
+const {isloggedin,isAuthorized}= require("../middlewares/isloggedin");
 
 const validateListing = (req, res, next) => {
     let { error } = ListingSchema.validate(req.body);
@@ -26,7 +26,12 @@ router.get('/', wrapAsync(async (req, res) => {
 router.get('/details/:id', wrapAsync(async (req, res) => {
     let id = req.params.id;
     //console.log(id);
-    const listing = await Listing.findById(id).populate("review").populate("owner")
+    const listing = await Listing.findById(id).populate({
+        path:"review",
+        populate:{
+            path:"author"
+        },
+    })
     console.log(listing);
     if(!listing){
         req.flash("fail","listing not found")
@@ -45,7 +50,7 @@ router.get('/new', isloggedin, wrapAsync(async (req, res) => {
     
 }))
 
-router.post('/newlisting',  wrapAsync(async (req, res,next) => {
+router.post('/newlisting', wrapAsync(async (req, res,next) => {
    
    
    
@@ -69,7 +74,7 @@ router.post('/newlisting',  wrapAsync(async (req, res,next) => {
 }));
 
 //edit route
-router.get('/:id/edit', isloggedin, wrapAsync(
+router.get('/:id/edit', isloggedin,isAuthorized,  wrapAsync(
     async (req, res) => {
         let id = req.params.id;
         let listing = await Listing.findById(id);
@@ -78,10 +83,20 @@ router.get('/:id/edit', isloggedin, wrapAsync(
     }
 ))
 
-router.put('/:id/edited',  wrapAsync(async (req, res) => {
+router.put('/:id/edited', isloggedin,isAuthorized,   wrapAsync(async (req, res) => {
     
         let id = req.params.id;
         let { title, description, image, price, location, country } = req.body;
+        // let id= req.params.id;
+        // let listing = await Listing.findById(id);
+        // if(!listing.owner._id.equals(res.locals.user._id)){
+           
+        //     req.flash("fail","you are not owner of listing to edit details");
+        //    return res.redirect(`/listing/details/${id}`);
+
+
+        // }
+
         
         await Listing.findByIdAndUpdate(id, {
             title: title,
@@ -100,7 +115,7 @@ router.put('/:id/edited',  wrapAsync(async (req, res) => {
 
 //delete route
 
-router.delete("/:id", isloggedin, wrapAsync(async (req, res) => {
+router.delete("/:id", isloggedin,isAuthorized,  wrapAsync(async (req, res) => {
     let { id } = req.params;
     let deletedListing = await Listing.findByIdAndDelete(id);
     console.log(deletedListing);

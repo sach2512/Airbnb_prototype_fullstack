@@ -7,6 +7,7 @@ const{ReviewSchema}  = require('../schema');
 const reviews = require('../models/reviewmodel')
 const methodOverride = require("method-override");
 const Listing = require("../models/listingmodel");
+const { isloggedin,isReviewOwner } = require("../middlewares/isloggedin");
 
 const validateReview = (req, res, next) => {
     let { error } = ReviewSchema.validate(req.body);
@@ -20,17 +21,18 @@ const validateReview = (req, res, next) => {
 // new reviews
 
 
-router.post("/",  wrapAsync(async (req, res) => {
+router.post("/", isloggedin,  wrapAsync(async (req, res) => {
     const { rate, review } = req.body;
     const listing = await Listing.findById(req.params.id);
     const newReview = new reviews({
         rating: rate,
         review: review
     });
+    newReview.author= req.user._id;
     await newReview.save();
     listing.review.push(newReview);
     await listing.save();
-    console.log(listing)
+    //console.log(listing)
     console.log(newReview);
    req.flash("success","review added successfully")
     res.redirect(`/listing/details/${req.params.id}`);
@@ -40,7 +42,7 @@ router.post("/",  wrapAsync(async (req, res) => {
 
 }));
 // delete  review and one to one relation
-router.delete('/:reviewid',wrapAsync(async(req,res)=>{
+router.delete('/:reviewid',isloggedin,isReviewOwner,wrapAsync(async(req,res)=>{
         
     let id= req.params.id;
     let reviewid = req.params.reviewid;

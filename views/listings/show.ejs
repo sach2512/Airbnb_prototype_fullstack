@@ -1,3 +1,4 @@
+
 <%- layout('../layouts/boilerplate.ejs') %>
 
 <style>
@@ -69,6 +70,7 @@
       <p class="card-text"><strong>Location:</strong> <%= listing.location %></p>
       <p class="card-text"><strong>Country:</strong> <%= listing.country %></p>
      <div class="buttons">
+       
       <% if (user && user._id.equals( listing.owner._id)) { %>
         <form action="/listing/<%= listing.id %>/edit" method="GET">
           <button type="submit" class="btn btn-primary">Edit</button>
@@ -80,17 +82,19 @@
       
 
     
-      <% console.log("Listing Owner:", listing.owner._id); %>
-      <% console.log("User:", user); %>
+    
 
       
   
   
       
+      <% if(user){%>
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#review">
+          write a review
+        </button>
+
+      <%}%>
       
-      <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#review">
-        write a review
-      </button>
       
       
      </div>
@@ -134,7 +138,7 @@
   <% for (let review of listing.review) { %>
     <div class="card " id="reviewcard">
       <div class="card-body">
-        <h5 class="card-title">John</h5>
+        <h5 class="card-title"><%=review.author.username%></h5>
         <p class="card-text">Review: <%= review.rating %></p>
         <p class="card-text">Review: <%= review.review %></p>
         <form action='/listing/<%=listing.id%>/reviews/<%=review.id%>?_method=DELETE' method="post">
@@ -142,6 +146,7 @@
         </form>
       </div>
     </div>
+
   <% } %>
 
 

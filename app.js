@@ -61,16 +61,11 @@ app.use(session(sessionOptions));
 app.use((req,res,next)=>{
     res.locals.success= req.flash("success");
     res.locals.fail= req.flash("fail");
-    //res.locals.user= req.user;
+ res.locals.user=req.user
     
     next()
 })
-app.use((req, res, next) => {
-    //console.log('req.user:', req.user); // Log req.user
-    res.locals.user = req.user; // Set res.locals.user
-    console.log('req.user:', req.user);
-    next();
-});
+
 
 app.use(passport.initialize());
 app.use(passport.session());
@@ -138,6 +133,12 @@ passport.authenticate("local", { failureRedirect: '/user/login', failflash: true
    res.redirect(redirectUrl);
     //console.log(`the redirect url is : ${redirectUrl}`);
  })
+ app.use((req, res, next) => {
+    //console.log('req.user:', req.user); // Log req.user
+    res.locals.user = req.user; // Set res.locals.user
+    console.log('req.user:', req.user);
+    next();
+});
 
  app.get('/user/logout',(req,res,next)=>{
     req.logout((err)=>{

@@ -1,4 +1,5 @@
-
+const Listing = require("../models/listingmodel");
+const reviews = require("../models/reviewmodel");
 // function isloggedin(req,res,next){
 //     //console.log(req.user);
 //     if(!req.isAuthenticated()){
@@ -22,6 +23,8 @@ module.exports.isloggedin = (req,res,next)=>{
         console.log( req.session.redirectUrl)
         req.flash("fail","you must be loged in to do these")
         return res.redirect("/user/login");
+    }else{
+        console.log(`the reques yser id is ${req.user._id}`);
     }
     next();
 }
@@ -32,6 +35,33 @@ module.exports. savedRedirectUrl=(req, res, next)=> {
         console.log(res.locals.redirectUrl);
     }
     next(); 
+}
+
+module.exports.isAuthorized=  async (req,res,next)=>{
+    let id= req.params.id;
+        let listing = await Listing.findById(id);
+        if(!listing.owner._id.equals(res.locals.user._id)){
+           
+            req.flash("fail","you are not owner of listing to make changes");
+           return res.redirect(`/listing/details/${id}`);
+
+
+        }
+
+}
+module.exports.isReviewOwner=  async (req,res,next)=>{
+    let reviewid= req.params.reviewid
+    let id= req.params.id;
+        let review = await reviews.findById(reviewid);
+        if(!review.author.equals(res.locals.user._id)){
+           
+            req.flash("fail","you are not owner of review to delete it");
+           return res.redirect(`/listing/details/${id}`);
+
+
+        }
+        next()
+
 }
 //module.exports=savedRedirectUrl;
 //module.exports=isloggedin;
