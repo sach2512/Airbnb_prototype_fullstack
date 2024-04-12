@@ -1,5 +1,6 @@
 const Listing = require("../models/listingmodel");
 const reviews = require("../models/reviewmodel");
+const{ListingSchema}  = require('../schema');
 // function isloggedin(req,res,next){
 //     //console.log(req.user);
 //     if(!req.isAuthenticated()){
@@ -16,6 +17,15 @@ const reviews = require("../models/reviewmodel");
 //     next();
 
 // }
+module.exports. validateListing = (req, res, next) => {
+    let { error } = ListingSchema.validate(req.body);
+    if (error) {
+        let errMsg = error.details.map(el => el.message).join(",");
+        next(new ErrorClass(400, errMsg));
+    } else {
+        next();
+    }
+}
 module.exports.isloggedin = (req,res,next)=>{
 
     if(!req.isAuthenticated()){
@@ -62,6 +72,7 @@ module.exports.isReviewOwner=  async (req,res,next)=>{
         }
         next()
 
-}
-//module.exports=savedRedirectUrl;
-//module.exports=isloggedin;
+    }
+
+    
+
