@@ -87,75 +87,7 @@ app.use((req, res, next) => {
 
 
 app.use('/user',userrouter);
-// app.get('/user/signup',(req,res)=>{
-//     res.render("signup.ejs")
-// })
 
-// app.post('/signup', async (req, res) => {
-//     try {
-//         const { username, email, password } = req.body;
-
-       
-//         const user = new User({
-//             email: email,
-//             username: username,
-//            password: password
-//         });
-
-        
-//        const registeredUser= await User.register(user, password);
-//        req.login(registeredUser,(err)=>{
-//         if(err){
-//            return next(err)
-//         }else{
-//             req.flash("success", "Signup successful ,you are logged in");
-//             res.redirect('/listing');
-//         }
-//        })
-
-       
-//     } catch (error) {
-       
-//         console.log(error);
-//         req.flash("error", "Signup failed");
-//         res.redirect('/signup'); 
-//     }
-// });
-
-
-// app.get('/user/login',(req,res)=>{
-//     res.render("login.ejs");
-// })
-
-// app.post('/login', savedRedirectUrl,
-
-// passport.authenticate("local", { failureRedirect: '/user/login', failflash: true }), async (req, res) => {
-//     req.flash("success","you are logged in")
-//     console.log(`the reques yser id is ${req.user._id}`);
-//     let redirectUrl= res.locals.redirectUrl||'/listing'
-//     //console.log(res.locals.redirectUrl)
-//     //res.redirect(res.locals.redirectUrl);
-//     //res.redirect('/listing');
-//    res.redirect(redirectUrl);
-//     //console.log(`the redirect url is : ${redirectUrl}`);
-//  })
-//  app.use((req, res, next) => {
-//     //console.log('req.user:', req.user); // Log req.user
-//     res.locals.user = req.user; // Set res.locals.user
-//     console.log('req.user:', req.user);
-//     next();
-// });
-
-//  app.get('/user/logout',(req,res,next)=>{
-//     req.logout((err)=>{
-//        if(err){
-//         next(err)
-//        }else{
-//         req.flash("success","you are loged out!");
-//         res.redirect('/listing');
-//        }
-//     })
-//  })
 app.use('/listing',listingrouter);
 
 app.use('/listing/:id/reviews',reviewrouter)

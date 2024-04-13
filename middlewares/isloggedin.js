@@ -26,6 +26,15 @@ module.exports. validateListing = (req, res, next) => {
         next();
     }
 }
+module.exports.validateReview = (req, res, next) => {
+    let { error } = ReviewSchema.validate(req.body);
+    if (error) {
+        let errMsg = error.details.map(el => el.message).join(",");
+        next(new ErrorClass(400, errMsg));
+    } else {
+        next();
+    }
+}
 module.exports.isloggedin = (req,res,next)=>{
 
     if(!req.isAuthenticated()){

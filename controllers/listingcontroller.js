@@ -1,4 +1,4 @@
-const Listing = require("../models/listingmodel");;
+const Listing = require("../models/listingmodel");
 module.exports.index=  async (req, res) => {
         const listings = await Listing.find();
         //console.log(listings);
