@@ -109,7 +109,21 @@
           <form class="needs-validation" action="/listing/<%= listing.id %>/reviews" method="post" novalidate>
             <div class="form-group">
               <label for="rate">Rating</label>
-              <input type="range" class="form-control-range" id="rate" name="rate" min="1" max="5" step="1" value="0" required>
+              
+              <fieldset class="starability-basic">
+                <legend>First rating:</legend>
+                <input type="radio" id="no-rate" class="input-no-rate" name="rate" value="1" checked aria-label="No rating." />
+                <input type="radio" id="first-rate1" name="rate" value="1" />
+                <label for="first-rate1" title="Terrible">1 star</label>
+                <input type="radio" id="first-rate2" name="rate" value="2" />
+                <label for="first-rate2" title="Not good">2 stars</label>
+                <input type="radio" id="first-rate3" name="rate" value="3" />
+                <label for="first-rate3" title="Average">3 stars</label>
+                <input type="radio" id="first-rate4" name="rate" value="4" />
+                <label for="first-rate4" title="Very good">4 stars</label>
+                <input type="radio" id="first-rate5" name="rate" value="5" />
+                <label for="first-rate5" title="Amazing">5 stars</label>
+              </fieldset>
               <div class="invalid-feedback">Please provide a rating.</div>
               
             </div>
@@ -139,6 +153,10 @@
     <div class="card " id="reviewcard">
       <div class="card-body">
         <h5 class="card-title"><%=review.author.username%></h5>
+        
+  <p class="starability-result" data-rating="<%= review.rating %>">
+    Rated: <%= review.rating %>
+  </p>
         <p class="card-text">Review: <%= review.rating %></p>
         <p class="card-text">Review: <%= review.review %></p>
         <form action='/listing/<%=listing.id%>/reviews/<%=review.id%>?_method=DELETE' method="post">

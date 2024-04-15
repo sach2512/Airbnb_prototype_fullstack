@@ -42,7 +42,7 @@
 
 
 <body>
-    <form action="/listing/newlisting" method="post" class="needs-validation" novalidate>
+    <form action="/listing/newlisting" method="post" class="needs-validation" novalidate enctype="multipart/form-data">
         <div >
             <label for="title">title:</label>
         <input type="text" id="title" name="title" required >
@@ -57,8 +57,9 @@
        </div>
         <div>
             <label for="image">Image File:</label>
-        <input type="text" id="image" name="image"  >
-       
+        <input type="file" id="image" name="image"  >
+        
+
         </div>
 
       <div>

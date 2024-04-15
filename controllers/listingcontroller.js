@@ -37,9 +37,9 @@ module.exports.index=  async (req, res) => {
             
    
    
-   
+                    
                 let { title, description, image, price, location, country } = req.body;
-        
+
                 const newlist = new Listing({
                     title: title,
                     description: description,
@@ -51,6 +51,7 @@ module.exports.index=  async (req, res) => {
                 newlist.owner= req.user;
                 await newlist.save();
                 req.flash("success","listing added sucessfully")
+                
                 
                 res.redirect('/listing');
            

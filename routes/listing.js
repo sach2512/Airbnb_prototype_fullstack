@@ -7,6 +7,10 @@ const wrapAsync= require('../utils/wrapAsync')
 const ErrorClass= require('../utils/errorclass');
 const {isloggedin,isAuthorized,validateListing}= require("../middlewares/isloggedin");
 const listingcontroller= require('../controllers/listingcontroller.js')
+const multer  = require('multer')
+const {storage} = require('../cloudConfig.js');
+const {cloudinary}= require('../cloudConfig.js');
+const upload = multer({ storage });
 
 
 // show route
@@ -18,7 +22,10 @@ router.get('/details/:id',(listingcontroller.showlisting) )
 
 router.get('/new', isloggedin, wrapAsync(listingcontroller.addlisting))
 
-router.post('/newlisting', wrapAsync(listingcontroller.newlisting));
+//router.post('/newlisting',upload.single("image"), wrapAsync(listingcontroller.newlisting));
+router.post('/newlisting', upload.single("image"),async(req,res)=>{
+  res.send(req.file);
+})
 
 //edit route
 router.get('/:id/edit', isloggedin, isAuthorized, wrapAsync(listingcontroller.edit));
@@ -29,5 +36,4 @@ router.put('/:id/edited', isloggedin,isAuthorized,   wrapAsync(listingcontroller
 
 router.delete("/:id", isloggedin,isAuthorized,  wrapAsync(listingcontroller.delete));
 
-
-  module.exports=router;
+module.exports=router;
