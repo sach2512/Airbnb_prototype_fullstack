@@ -1,4 +1,7 @@
 const Listing = require("../models/listingmodel");
+const mbxGeocoding = require('@mapbox/mapbox-sdk/services/geocoding');
+const token =process.env.MAP_TOKEN;
+const geocodingClient = mbxGeocoding({ accessToken: token });
 module.exports.index=  async (req, res) => {
         const listings = await Listing.find();
         //console.log(listings);
@@ -35,27 +38,32 @@ module.exports.index=  async (req, res) => {
 
         module.exports.newlisting= async(req,res)=>{
             
-   
-   
-                    
-                let { title, description, image, price, location, country } = req.body;
-
+            let response=  await geocodingClient.forwardGeocode({
+                query: 'delhi india',
+                limit:1,
+            }).send();
+           let { title, description, image, price, location, country } = req.body;
+                let url= req.file.path;
+                let filename= req.file.filename;
                 const newlist = new Listing({
                     title: title,
                     description: description,
-                    image: image,
+                
                     price: price,
                     location: location,
                     country: country
                 });
                 newlist.owner= req.user;
+                newlist.geometry=response.body.features[0].geometry;
+                newlist.image={url,filename}
                 await newlist.save();
                 req.flash("success","listing added sucessfully")
                 
-                
+                console.log(url);
+                console.log(filename);
                 res.redirect('/listing');
-           
-            
+           console.log(`newlist is ${newlist}`);
+        
         }
         
 
@@ -72,16 +80,23 @@ module.exports.edit=async(req,res)=>{
 module.exports.edited=async (req, res) => {
     
     let id = req.params.id;
-    let { title, description, image, price, location, country } = req.body;
-    
-    await Listing.findByIdAndUpdate(id, {
+    let { title, description,  price, location, country } = req.body;
+    let url= req.file.path;
+    let filename= req.file.filename
+    const listing=await Listing.findByIdAndUpdate(id, {
+        
         title: title,
         description: description,
-        image: image,
+        
         price: price,
         location: location,
         country: country
     });
+    if (req.file !== undefined) {
+        listing.image = { url, filename }; // Update the image property
+        await listing.save(); // Save the updated listing
+    }
+   
     req.flash("success","listing successfully edited");
     res.redirect(`/listing/details/${id}`);
  

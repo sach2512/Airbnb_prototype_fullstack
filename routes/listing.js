@@ -22,15 +22,15 @@ router.get('/details/:id',(listingcontroller.showlisting) )
 
 router.get('/new', isloggedin, wrapAsync(listingcontroller.addlisting))
 
-//router.post('/newlisting',upload.single("image"), wrapAsync(listingcontroller.newlisting));
-router.post('/newlisting', upload.single("image"),async(req,res)=>{
-  res.send(req.file);
-})
+router.post('/newlisting',upload.single("image"), wrapAsync(listingcontroller.newlisting));
+//router.post('/newlisting', upload.single("image"),async(req,res)=>{
+  //res.send(req.file);
+//})
 
 //edit route
 router.get('/:id/edit', isloggedin, isAuthorized, wrapAsync(listingcontroller.edit));
 
-router.put('/:id/edited', isloggedin,isAuthorized,   wrapAsync(listingcontroller.edited));
+router.put('/:id/edited', isloggedin,isAuthorized, upload.single("image"),  wrapAsync(listingcontroller.edited));
 
 //delete route
 

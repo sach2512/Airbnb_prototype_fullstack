@@ -50,7 +50,7 @@
 
 <body>
 
-<form action="/listing/<%=listing.id%>/edited?_method=PUT" method="post" class="needs-validation" novalidate>
+<form action="/listing/<%=listing.id%>/edited?_method=PUT" method="post" class="needs-validation" novalidate enctype="multipart/form-data">
     <h1>Edit Your Listing</h1>
   <div>
     <label for="title">Title:</label>
@@ -65,10 +65,13 @@
     <div class="invalid-feedback">Description  is required</div>
    
     </div>
+    <div>
+        original image:<img src=<%=listing.image.url%>>
+    </div>
 <div>
     
-    <label for="image">Image File:</label>
-    <input type="text" id="image" name="image"  value="<%= listing.image %>" required>
+    <label for="image"> upload new Image File:</label>
+    <input type="file" id="image" name="image"   >
    
     
 </div>

@@ -1,5 +1,10 @@
 
 <%- layout('../layouts/boilerplate.ejs') %>
+<script>
+  const Token="<%=process.env.MAP_TOKEN%>"
+  let coordinates = <%- JSON.stringify(listing.geometry.coordinates) %>
+
+</script>
 
 <style>
   .listing-card {
@@ -9,6 +14,10 @@
     width: 500px;
     margin-left: 30%;
     
+  }
+  #map { 
+    height: 400px;
+    width: 60vh;
   }
   .listingcardbody {
     padding: 20px;
@@ -59,10 +68,10 @@
 <body>
   <h2><%= listing.title %></h2>
   <div class="listing-card">
-    <img src="<%= listing.image %>" class="card-img" alt="Listing Image">
+    <img src="<%= listing.image.url %>" class="card-img" alt="Listing Image">
     <div class="card-body listingcardbody">
       <p class="card-text">owned by ! <%= listing.owner.email %></p>
-      <p class="card-text">owned by ! <%= listing.owner._id %></p>
+      
       
       
       <p class="card-text"><%= listing.description %></p>
@@ -146,27 +155,26 @@
      
 <hr>
 <hr>
-<h3>All Reviews</h3>
-
-
+<% if(listing.review.length > 0) { %>
+  <h3>All Reviews</h3>
   <% for (let review of listing.review) { %>
-    <div class="card " id="reviewcard">
+    <div class="card" id="reviewcard">
       <div class="card-body">
-        <h5 class="card-title"><%=review.author.username%></h5>
-        
-  <p class="starability-result" data-rating="<%= review.rating %>">
-    Rated: <%= review.rating %>
-  </p>
-        <p class="card-text">Review: <%= review.rating %></p>
+        <h5 class="card-title"><%= review.author.username %></h5>
+        <p class="starability-result" data-rating="<%= review.rating %>">
+          Rating: <%= review.rating %>
+        </p>
         <p class="card-text">Review: <%= review.review %></p>
-        <form action='/listing/<%=listing.id%>/reviews/<%=review.id%>?_method=DELETE' method="post">
-          <button type="submit" class="btn btn-sm btn-danger">delete review</button>
+        <form action='/listing/reviews/<%= review.id %>?_method=DELETE' method="post">
+          <button type="submit" class="btn btn-sm btn-danger">Delete review</button>
         </form>
       </div>
     </div>
-
   <% } %>
+<% } %>
 
+<h3>where will you be</h3>
+<div id="map"></div>
 
 
 
@@ -179,6 +187,7 @@
 
    
     <script src="/script.js/validation.js"></script>
+    <script src="/script.js/map.js"></script>
  
 
 
