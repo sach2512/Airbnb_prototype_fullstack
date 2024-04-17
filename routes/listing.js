@@ -23,9 +23,7 @@ router.get('/details/:id',(listingcontroller.showlisting) )
 router.get('/new', isloggedin, wrapAsync(listingcontroller.addlisting))
 
 router.post('/newlisting',upload.single("image"), wrapAsync(listingcontroller.newlisting));
-//router.post('/newlisting', upload.single("image"),async(req,res)=>{
-  //res.send(req.file);
-//})
+
 
 //edit route
 router.get('/:id/edit', isloggedin, isAuthorized, wrapAsync(listingcontroller.edit));

@@ -31,7 +31,7 @@ const passport= require("passport");
 const User= require('./models/user.js')
 const LocalStrategy = require('passport-local');
 const {savedRedirectUrl} = require('./middlewares/isloggedin.js');
-
+const Url=process.env.atlas_url
 main()
     .then(() => {
         console.log("Connection Successfull");
@@ -39,7 +39,7 @@ main()
     .catch(err => console.log(err));
 
 async function main() {
-    await mongoose.connect('mongodb://127.0.0.1:27017/listing');
+    await mongoose.connect(Url);
 }
 
 app.use(express.json());
@@ -76,9 +76,7 @@ passport.deserializeUser(User.deserializeUser());
 
 
 
-app.get('/',async(req,res)=>{
-    res.send("hi i am home");
-})
+
 app.use((req, res, next) => {
     //console.log('req.user:', req.user); // Log req.user
     res.locals.user = req.user; // Set res.locals.user

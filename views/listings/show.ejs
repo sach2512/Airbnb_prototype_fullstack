@@ -2,7 +2,7 @@
 <%- layout('../layouts/boilerplate.ejs') %>
 <script>
   const Token="<%=process.env.MAP_TOKEN%>"
-  let coordinates = <%- JSON.stringify(listing.geometry.coordinates) %>
+  let listing =<%-JSON.stringify(listing)%>;
 
 </script>
 

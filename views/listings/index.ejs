@@ -68,10 +68,28 @@
   -webkit-transform: scale(1.05); 
   transform: scale(1.05); 
 }
+#filters{
+    margin-top: 15px;
+    display: flex;
+    flex-wrap:wrap;
+}
+.filter{
+    margin-top: 10px;
+    text-align: center;
+    margin-right: 10px;
+    margin-top: 3px;
+    opacity: 0.7;
+}
+.filter:hover{
+cursor: pointer;
+opacity: 1;
+}
 </style>
 <body>
-    <h4>All Listings</h4>
-    <div class="card-container">
+   
+    <h4>All listing</h4>
+        
+    <div class="card-container mt-3">
      
         <% for(var list of listings) { %>
            <a href="listing/details/<%= list.id %>" class="showlist">
