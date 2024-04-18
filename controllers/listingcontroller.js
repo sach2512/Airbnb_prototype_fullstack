@@ -82,8 +82,9 @@ module.exports.edited=async (req, res) => {
     
     let id = req.params.id;
     let { title, description,  price, location, country } = req.body;
-    let url= req.file.path;
-    let filename= req.file.filename
+
+   
+    
     const listing=await Listing.findByIdAndUpdate(id, {
         
         title: title,
@@ -101,11 +102,10 @@ module.exports.edited=async (req, res) => {
     }
    
     req.flash("success","listing successfully edited");
-    res.redirect(`/listing/details/${id}`);
- 
-   
+   res.redirect(`/listing/details/${id}`);
 
 }
+
 
 module.exports.delete= async (req, res) => {
     let { id } = req.params;
