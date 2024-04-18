@@ -93,7 +93,9 @@ module.exports.edited=async (req, res) => {
         location: location,
         country: country
     });
-    if (req.file !== undefined) {
+    if (typeof req.file !== "undefined") {
+        let url= req.file.path;
+        let filename= req.file.filename
         listing.image = { url, filename }; // Update the image property
         await listing.save(); // Save the updated listing
     }
