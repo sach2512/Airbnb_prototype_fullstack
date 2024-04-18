@@ -1,113 +1,209 @@
 <%- layout('../layouts/boilerplate.ejs') %>
 
 <style>
- .card-container {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr); 
-    grid-gap: 10px; 
-}
-
-/*@media (max-width: 1200px) {
-    .card-container {
-        grid-template-columns: repeat(3, 1fr); 
-    }
-}*/
-
-/*@media (max-width: 800px) {
-    .card-container {
-        grid-template-columns: repeat(2, 1fr); 
-    }
-}*/
-
-/*@media (max-width: 600px) {
-    .card-container {
-        grid-template-columns: 1fr; 
-    }
-}*/
-.card-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); /* Responsive grid layout */
-    grid-gap: 10px; /* Adjust the gap between grid items */
-}
-
-
-    .card {
-        height: 450px;
-        width: 300px;
-        border: none;
-         border-bottom: 2rem;
-         margin-top: 7px;
-    }
-    .cardimg {
-        width: 18rem;
-        height: 20rem;
-        object-fit: cover;
-       border-radius: 10px;
-       padding: 0;
-       transition: transform .4s;
-    }
-   
-    .card-img-overlay{
-        opacity: 0;
-        
-    }
-    .card-body{
-        padding: 0%;
-    }
-    .card-title,
-.card-text {
-    font-family: "Jakarta", sans-serif; 
-    font-weight: 700; 
-}
-.showlist{
-    text-decoration: none;
-
-}
-.card:hover {
-  -ms-transform: scale(1.05);
-  -webkit-transform: scale(1.05); 
-  transform: scale(1.05); 
-}
-#filters{
-    margin-top: 15px;
+  .card-container {
     display: flex;
-    flex-wrap:wrap;
-}
-.filter{
-    margin-top: 10px;
-    text-align: center;
-    margin-right: 10px;
-    margin-top: 3px;
-    opacity: 0.7;
-}
-.filter:hover{
-cursor: pointer;
-opacity: 1;
-}
-</style>
-<body>
-   
-    <h4>All listing</h4>
-        
-    <div class="card-container mt-3">
-     
-        <% for(var list of listings) { %>
-           <a href="listing/details/<%= list.id %>" class="showlist">
-            <div class="card">
-                <div class="card-header">
-                    <img class="cardimg" alt="..." src="<%= list.image.url %>">
-                    <div class="card-img-overlay"></div>
-                </div>
-                
-                <div class="card-body">
-                  <!--<a href="listing/details/<%= list.id %>"><%= list.title %></a>-->
+    flex-wrap: wrap;
+    justify-content: space-between; /* Distribute cards evenly */
+    margin: -5px; /* Negative margin to offset spacing */
+  }
 
-                    <h5 class="card-title"><%= list.title %></h5>
-                    <p class="card-text">&#8377;<%= list.price.toLocaleString("en-IN") %> / per night</p>
-                </div>
-            </div>
-           </a>
-        <% } %>
-       
+  .card {
+    flex: 0 0 calc(25% - 10px); /* Adjust card width for 4 cards in a row */
+    margin: 5px; /* Add spacing between cards */
+    height: 450px;
+    width: 300px;
+    border: none;
+    border-bottom: 2rem;
+    margin-top: 7px;
+  }
+
+  @media (max-width: 1200px) {
+    .card {
+      flex: 0 0 calc(33.33% - 10px); /* Adjust card width for 3 cards in a row */
+    }
+  }
+
+  @media (max-width: 800px) {
+    .card {
+      flex: 0 0 calc(50% - 10px); /* Adjust card width for 2 cards in a row */
+    }
+  }
+
+  @media (max-width: 600px) {
+    .card {
+      flex: 0 0 calc(100% - 10px); /* Full width for 1 card in a row */
+    }
+  }
+
+  .cardimg {
+    width: 18rem;
+    height: 20rem;
+    object-fit: cover;
+    border-radius: 10px;
+    padding: 0;
+    transition: transform 0.4s;
+  }
+
+  .card-img-overlay {
+    opacity: 0;
+  }
+
+  .card-body {
+    padding: 0%;
+  }
+
+  .card-title,
+  .card-text {
+    font-family: "Jakarta", sans-serif;
+    font-weight: 700;
+  }
+
+  .showlist {
+    text-decoration: none;
+  }
+
+  .card:hover {
+    -ms-transform: scale(1.05);
+    -webkit-transform: scale(1.05);
+    transform: scale(1.05);
+  }
+
+  #filters {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .filter {
+    text-align: center;
+    margin-right: 2rem;
+    margin-top: 2rem;
+    opacity: 0.7;
+  }
+
+  .filter:hover {
+    opacity: 1;
+    cursor: pointer;
+  }
+
+  .filter p {
+    font-size: 0.8rem;
+  }
+
+  .tax-info {
+    display: none;
+  }
+
+  .tax-toggle {
+    border: 1px solid black;
+    border-radius: 1rem;
+    height: 3.25rem;
+    padding: 0.5rem;
+    display: flex;
+    margin-left: 2rem;
+    align-items: center;
+  }
+</style>
+
+<body>
+ 
+
+  <div id="filters">
+    <div class="filter">
+      <div><i class="fa-solid fa-fire"></i></div>
+      <p>Trending</p>
     </div>
+    <div class="filter">
+      <div><i class="fa-solid fa-bed"></i></div>
+      <p>Rooms</p>
+    </div>
+    <div class="filter">
+      <div><i class="fa-solid fa-mountain-city"></i></div>
+      <p>Iconic cities</p>
+    </div>
+    <div class="filter">
+      <div><i class="fa-solid fa-mountain"></i></div>
+      <p>Mountains</p>
+    </div>
+    <div class="filter">
+      <div><i class="fa-brands fa-fort-awesome"></i></div>
+      <p>Castles</p>
+    </div>
+    <div class="filter">
+      <div><i class="fa-solid fa-snowflake"></i></div>
+      <p>Arctic</p>
+    </div>
+    <div class="filter">
+      <div><i class="fa-solid fa-binoculars"></i></div>
+      <p>Camping</p>
+    </div>
+    <div class="filter">
+      <div><i class="fa-solid fa-tractor"></i></div>
+      <p>Farms</p>
+    </div>
+    <div class="filter">
+      <div><i class="fa-solid fa-person-swimming"></i></div>
+      <p>Amazing pools</p>
+    </div>
+    <!-- Add more filters here -->
+    <div class="filter">
+      <div><i class="fa-solid fa-tree"></i></div>
+      <p>Forests</p>
+    </div>
+    <div class="filter">
+      <div><i class="fa-solid fa-globe"></i></div>
+      <p>World Heritage Sites</p>
+    </div>
+    <div class="filter">
+      <div><i class="fa-solid fa-ship"></i></div>
+      <p>Beaches</p>
+    </div>
+    <div class="filter">
+      <div><i class="fa-solid fa-plane"></i></div>
+      <p>Airports</p>
+    </div>
+    <div class="tax-toggle">
+        <div class="form-check-reverse form-switch">
+          <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault">
+          <label class="form-check-label" for="flexSwitchCheckDefault">Display Total after taxes</label>
+        </div>
+      </div>
+      
+  </div>
+
+  <div class="card-container mt-3">
+    <% for(var list of listings) { %>
+    <a href="listing/details/<%= list.id %>" class="showlist">
+      <div class="card">
+        <div class="card-header">
+          <img class="cardimg" alt="..." src="<%= list.image.url %>">
+          <div class="card-img-overlay"></div>
+        </div>
+        <div class="card-body">
+          <!--<a href="listing/details/<%= list.id %>"><%= list.title %></a>-->
+          <h5 class="card-title"><%= list.title %></h5>
+          <p class="card-text">&#8377;<%= list.price.toLocaleString("en-IN") %> / per night</p>
+        </div>
+      </div>
+    </a>
+    <% } %>
+  </div>
+
+  
 </body>
+<script>
+    let taxSwitch = document.getElementById("flexSwitchCheckDefault");
+   taxSwitch.addEventListener("click",()=>{
+    let taxInfo = document.getElementsByClassName("tax-info");
+    for(info of taxInfo){
+      if(info.style.display!= "inline"){
+        info.style.display = "inline";
+      }
+      else{
+        info.style.display = "none";
+      }
+    }
+   })
+  </script>
+  
