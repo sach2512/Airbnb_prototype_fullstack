@@ -26,6 +26,7 @@ const listingrouter= require('./routes/listing');
 const reviewrouter= require('./routes/review');
 const userrouter= require('./routes/user')
 const session= require("express-session");
+const MongoStore = require('connect-mongo');
 const flash= require("connect-flash");
 const passport= require("passport");
 const User= require('./models/user.js')
@@ -45,9 +46,20 @@ async function main() {
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(flash())
-
+const store=MongoStore.create({
+    mongoUrl:Url,
+    crypto:{
+        secret:process.env.SECRET,
+        
+    },
+    touchAfter:24*3600,
+})
+store.on("error",()=>{
+    console.log(err);
+})
 const sessionOptions = {
-    secret: "mysecretkey",
+    store,
+    secret: process.env.SECRET,
     resave: false,
     saveUninitialized: true,
     cookie:{
@@ -58,6 +70,8 @@ const sessionOptions = {
 
     }
 };
+
+
 app.use(session(sessionOptions));
 app.use((req,res,next)=>{
     res.locals.success= req.flash("success");

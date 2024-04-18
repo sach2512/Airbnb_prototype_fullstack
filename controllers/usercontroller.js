@@ -21,6 +21,7 @@ module.exports.signup=async (req, res) => {
         
        const registeredUser= await User.register(user, password);
        req.login(registeredUser,(err)=>{
+        console.log(`the final user is ${req.user}`)
         if(err){
            return next(err)
         }else{
@@ -33,22 +34,26 @@ module.exports.signup=async (req, res) => {
     } catch (error) {
        
         console.log(error);
-        req.flash("error", "Signup failed");
+        req.flash("fail", "Signup failed");
         res.redirect('/signup'); 
     }
 }
 
 
-module.exports.login=async (req, res) => {
-    req.flash("success","you are logged in")
-    console.log(`the reques yser id is ${req.user._id}`);
-    let redirectUrl= res.locals.redirectUrl||'/listing'
-    //console.log(res.locals.redirectUrl)
-    //res.redirect(res.locals.redirectUrl);
-    //res.redirect('/listing');
-   res.redirect(redirectUrl);
-    //console.log(`the redirect url is : ${redirectUrl}`);
- }
+module.exports.login = async (req, res) => {
+   
+    if (req.user) {
+        req.flash("success", "You are logged in");
+        console.log(`The request user id is ${req.user._id}`);
+        let redirectUrl = res.locals.redirectUrl || '/listing';
+        return res.redirect(redirectUrl);
+    } else {
+        
+        req.flash("fail", 'Authentication failed. Please check your credentials.');
+        return res.redirect('/user/login');
+    }
+};
+
 
 
 

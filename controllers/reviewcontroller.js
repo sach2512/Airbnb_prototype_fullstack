@@ -1,6 +1,6 @@
 const reviews = require("../models/reviewmodel");
 const Listing = require("../models/listingmodel");
-
+//const Listing = require("../models/listingmodel");
 module.exports.newreview= async (req, res) => {
     const { rate, review } = req.body;
     const listing = await Listing.findById(req.params.id);

@@ -37,12 +37,13 @@ module.exports.index=  async (req, res) => {
     }
 
         module.exports.newlisting= async(req,res)=>{
-            
+            let { location, country } = req.body;
+            const query = `${location} `;
             let response=  await geocodingClient.forwardGeocode({
-                query: 'delhi india',
+                query: query,
                 limit:1,
             }).send();
-           let { title, description, image, price, location, country } = req.body;
+           let { title, description, image, price,  } = req.body;
                 let url= req.file.path;
                 let filename= req.file.filename;
                 const newlist = new Listing({
