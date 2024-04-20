@@ -1,22 +1,7 @@
 const Listing = require("../models/listingmodel");
 const reviews = require("../models/reviewmodel");
 const{ListingSchema}  = require('../schema');
-// function isloggedin(req,res,next){
-//     //console.log(req.user);
-//     if(!req.isAuthenticated()){
-//        req.session.redirectUrl=req.originalUrl;
-//         console.log( req.session.redirectUrl)
-       
-//         req.flash("fail","you must be loged in to do these")
-//          res.redirect("/user/login")
-        
-//     }else{
-//         console.log(`the reques yser id is ${req.user._id}`);
-//         console.log(res.locals.user)
-//     }
-//     next();
 
-// }
 module.exports. validateListing = (req, res, next) => {
     let { error } = ListingSchema.validate(req.body);
     if (error) {
@@ -47,11 +32,22 @@ module.exports.isloggedin = (req,res,next)=>{
     }
     next();
 }
+// module.exports. savedRedirectUrl=(req, res, next)=> {
+//     if (req.session.redirectUrl) {
+//         res.locals.redirectUrl = req.session.redirectUrl;
+//         console.log(res.locals.redirectUrl);
+//     } else {
+//         req.flash("fail", "enter propoer pass");
+//     }
+//     next(); 
+// }
 
 module.exports. savedRedirectUrl=(req, res, next)=> {
     if (req.session.redirectUrl) {
         res.locals.redirectUrl = req.session.redirectUrl;
         console.log(res.locals.redirectUrl);
+    }else{
+        req.flash("fail", "wrong credentials"); 
     }
     next(); 
 }
