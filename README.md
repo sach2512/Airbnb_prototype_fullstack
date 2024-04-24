@@ -29,7 +29,7 @@ The Listing Management System is designed to streamline the process of managing 
 
 ## Setup
 
-1. Clone the repository: ``
+1. Clone the repository: `https://github.com/sach2512/Airbnb_prototype_fullstack/tree/main`
 2. Install dependencies: `npm install`
 3. Start the server: `npm start`
 4. Access the application at `http://localhost:8080`
